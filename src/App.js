@@ -6,18 +6,39 @@ import { QRCodeCanvas } from "qrcode.react";
 import { useState } from "react";
 import { Box } from "@mui/material";
 
+const textStyle = css`
+  font-size: 16px;
+  padding: 5px 2px;
+  width: 440px;
+  background-color: black;
+  color: #fff;
+  padding: 5px;
+  line-height: 24px;
+`;
+
+function MyTextbox({ onChange, url }) {
+  return <textarea css={textStyle} rows="20" value={url} onChange={onChange} />;
+}
+function MyQRCodeCanvas({ url }) {
+  return (
+    <QRCodeCanvas
+      value={url}
+      size="300"
+      style={{
+        marginBottom: "20px",
+        padding: "10px",
+        backgroundColor: "#fff",
+      }}
+    />
+  );
+}
+
 function App() {
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
-
-  const textStyle = css`
-    font-size: 16px;
-    padding: 5px 2px;
-    width: 340px;
-  `;
 
   const [url, setUrl] = useState("");
 
@@ -34,28 +55,13 @@ function App() {
         sx={{ width: "100%", height: "100%" }}
       >
         <h1>QR Code Generator</h1>
-        <input
-          css={textStyle}
-          type="url"
-          name="url"
-          value={url}
-          placeholder="(url)"
-          onChange={(e) => setUrl(e.target.value)}
-          onFocus={(e) => e.target.select()}
-        />
         {url ? (
-          <QRCodeCanvas
-            value={url}
-            size="100"
-            style={{
-              marginTop: "20px",
-              padding: "10px",
-              backgroundColor: "#fff",
-            }}
-          />
+          <MyQRCodeCanvas url={url} />
         ) : (
           <p>ここにQRコードが表示されます</p>
         )}
+
+        <MyTextbox value={url} onChange={(e) => setUrl(e.target.value)} />
       </Box>
     </ThemeProvider>
   );
